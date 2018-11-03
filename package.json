@@ -22,12 +22,11 @@
     "@types/koa-bodyparser": "^5.0.1",
     "@types/koa-router": "^7.0.32",
     "@types/node": "^10.12.2",
-    "@types/reflect-metadata": "^0.1.0",
     "nodemon": "^1.18.5",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.6"
   },
   "dependencies": {
-    "@bonbons/core": "^1.2.0"
+    "@bonbons/core": "^1.2.1"
   }
 }
