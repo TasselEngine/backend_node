@@ -13,7 +13,7 @@ export class AuthPipe extends PipeMiddleware<AuthOptions> implements PipeOnInit 
   }
 
   pipeOnInit(): void {
-    console.log("auth pipe is init.")
+    console.log("auth pipe is init.");
   }
 
   async process(): Promise<void> {

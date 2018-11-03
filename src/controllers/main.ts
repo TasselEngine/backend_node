@@ -16,7 +16,7 @@ export class MainController extends ROUTER {
     return this.toJSON({
       code: 0,
       message: "hello world."
-    })
+    });
   }
 
   @Method("POST")
@@ -27,7 +27,7 @@ export class MainController extends ROUTER {
       code: 0,
       message: "success",
       data: token
-    })
+    });
   }
 
   @Method("GET")
@@ -43,7 +43,7 @@ export class MainController extends ROUTER {
           account: this.identity.account
         }
       }
-    })
+    });
   }
 
 }

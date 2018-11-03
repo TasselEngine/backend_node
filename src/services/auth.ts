@@ -15,7 +15,7 @@ interface IAuthorizeData extends IAuthorizeInfo {
   errorType: ErrorType;
 }
 
-const PRIMARY_KEY = "h6fx86gb40kg6ch3"
+const PRIMARY_KEY = "h6fx86gb40kg6ch3";
 const AES_KEY = C.enc.Utf8.parse(PRIMARY_KEY);
 const INIT_VECTOR = C.enc.Utf8.parse(PRIMARY_KEY);
 

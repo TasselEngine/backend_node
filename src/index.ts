@@ -21,9 +21,9 @@ Bonbons.Create()
   .option(TPL_RENDER_OPTIONS, { root: PATH("views") })
   .option(ERROR_RENDER_OPRIONS, { root: PATH("views/errors") })
   .start(() => {
-    console.log("server is running 3000.")
+    console.log("server is running 3000.");
   });
 
 function PATH(p: string) {
-  return path.resolve(__dirname, p)
+  return path.resolve(__dirname, p);
 }
