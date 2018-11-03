@@ -1,7 +1,7 @@
-import { C } from "./base";
+import { ROUTER } from "./base";
 import { Controller } from "@bonbons/core";
 
 @Controller("app")
-export class MainController extends C {
+export class MainController extends ROUTER {
 
 }

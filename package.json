@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --inspect=64001 -r ts-node/register ./start.js",
+    "start": "node --inspect=64001 -r ./start ./src/index.ts",
     "nodemon": "./node_modules/nodemon/bin/nodemon.js"
   },
   "repository": {
