@@ -13,7 +13,7 @@ import { Identity } from "./services/identity";
 
 Bonbons.Create()
   .scoped(Identity)
-  .scoped(AuthService)
+  .singleton(AuthService)
   .controller(MainController)
   .pipe(GlobalAUth({ ignore: ["/app/index", "/app/login"] }))
   .option(ENV_MODE, { mode: "development", trace: true })

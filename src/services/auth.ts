@@ -1,6 +1,5 @@
 import C from "crypto-js";
-import { Injectable, InjectService } from "@bonbons/core";
-import { Identity } from "./identity";
+import { Injectable } from "@bonbons/core";
 
 interface IAuthorizeInfo {
   account: string;
@@ -11,8 +10,7 @@ interface IAuthorizeInfo {
 type ErrorType = "INVALID_TOKEN" | "EXPIRES" | "VALID";
 
 interface IAuthorizeData extends IAuthorizeInfo {
-  valid: boolean;
-  errorType: ErrorType;
+  valid: ErrorType;
 }
 
 const PRIMARY_KEY = "h6fx86gb40kg6ch3";
@@ -22,9 +20,7 @@ const INIT_VECTOR = C.enc.Utf8.parse(PRIMARY_KEY);
 @Injectable()
 export class AuthService {
 
-  constructor(private injector: InjectService) { }
-
-  private readonly config = {
+  private readonly config: C.CipherOption = {
     iv: INIT_VECTOR,
     mode: C.mode.CBC,
     padding: C.pad.Pkcs7
@@ -32,10 +28,6 @@ export class AuthService {
 
   private get currentStamp() {
     return new Date().getTime();
-  }
-
-  private get identity(): Identity {
-    return this.injector.get(Identity);
   }
 
   protected encrypt(info: IAuthorizeInfo) {
@@ -50,7 +42,7 @@ export class AuthService {
       return ["VALID", auth];
     } catch (e) {
       const common = { account: "", uid: "" };
-      if (e === "EXPIRES") return ["EXPIRES", { ...common, expires: 0 }];
+      if (e === "EXPIRES") return [e, { ...common, expires: 0 }];
       return ["INVALID_TOKEN", { ...common, expires: -1 }];
     }
   }
@@ -65,14 +57,8 @@ export class AuthService {
 
   public validate(token?: string): IAuthorizeData {
     const [errorType, authorize] = this.decrypt(token || "");
-    const identity = this.identity;
-    identity["$authorize"] = {
-      account: authorize.account,
-      uid: authorize.uid
-    };
     return {
-      valid: errorType === "VALID",
-      errorType,
+      valid: errorType,
       ...authorize
     };
   }

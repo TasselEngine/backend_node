@@ -10,27 +10,27 @@
     koa-bodyparser "4.2.1"
     koa-router "7.4.0"
 
-"@bonbons/controllers@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@bonbons/controllers/-/controllers-1.2.2.tgz#1475a48f87ffabb205c942ad07155a72a510027d"
+"@bonbons/controllers@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@bonbons/controllers/-/controllers-1.2.3.tgz#bda58d4f52bec6ab64f06a4854e757b471ff2ad6"
   dependencies:
     "@bonbons/contracts" "^1.2.1"
     "@bonbons/di" "^1.2.2"
-    "@bonbons/plugins" "^1.2.2"
+    "@bonbons/plugins" "^1.2.3"
     "@bonbons/utils" "^1.2.2"
     iconv-lite "0.4.23"
 
-"@bonbons/core@1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@bonbons/core/-/core-1.2.4.tgz#67402699b884376db473315f6f7d3780637f00ab"
+"@bonbons/core@1.2.6":
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/@bonbons/core/-/core-1.2.6.tgz#50d6289a90b5e907b728435a9f85b50d2f07ae70"
   dependencies:
     "@bonbons/contracts" "^1.2.1"
-    "@bonbons/controllers" "^1.2.2"
+    "@bonbons/controllers" "^1.2.3"
     "@bonbons/decorators" "^1.2.1"
     "@bonbons/di" "^1.2.2"
     "@bonbons/options" "^1.2.1"
     "@bonbons/pipes" "^1.2.2"
-    "@bonbons/plugins" "^1.2.2"
+    "@bonbons/plugins" "^1.2.3"
     "@bonbons/utils" "^1.2.2"
 
 "@bonbons/decorators@^1.2.1":
@@ -64,9 +64,9 @@
     "@bonbons/di" "^1.2.2"
     "@bonbons/utils" "^1.2.2"
 
-"@bonbons/plugins@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@bonbons/plugins/-/plugins-1.2.2.tgz#1f7f55120de543715f8657150e63e58d25b1a1da"
+"@bonbons/plugins@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@bonbons/plugins/-/plugins-1.2.3.tgz#b96946512dfeb1fefc22ebb7460f6643a336a533"
   dependencies:
     "@bonbons/contracts" "^1.2.1"
     "@bonbons/di" "^1.2.2"
