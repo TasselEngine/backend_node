@@ -1,5 +1,5 @@
 import { ROUTER } from "./base";
-import { Controller, Route, Method, Pipes } from "@bonbons/core";
+import { Controller, Route, Method } from "@bonbons/core";
 import { AuthService } from "../services/auth";
 import { Identity } from "../services/identity";
 
@@ -33,7 +33,6 @@ export class MainController extends ROUTER {
   @Method("GET")
   @Route("/demo?{id}&{name}")
   public GetDemo(id: number, name: string) {
-    console.log(this.identity);
     return this.toJSON({
       code: 0,
       message: "success",

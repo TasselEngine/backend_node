@@ -2,82 +2,82 @@
 # yarn lockfile v1
 
 
-"@bonbons/contracts@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@bonbons/contracts/-/contracts-1.2.0.tgz#32a6178744605b1058f8fd41a1c73d9c7aa1c1af"
+"@bonbons/contracts@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@bonbons/contracts/-/contracts-1.2.1.tgz#5f8c41dfa0ee75fd8e82060569e75814cdaffe76"
   dependencies:
     koa "2.5.2"
     koa-bodyparser "4.2.1"
     koa-router "7.4.0"
 
-"@bonbons/controllers@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@bonbons/controllers/-/controllers-1.2.1.tgz#e205074b5137f95f2b778dd52c259f0fe9147ea5"
+"@bonbons/controllers@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@bonbons/controllers/-/controllers-1.2.2.tgz#1475a48f87ffabb205c942ad07155a72a510027d"
   dependencies:
-    "@bonbons/contracts" "^1.2.0"
-    "@bonbons/di" "^1.2.0"
-    "@bonbons/plugins" "^1.2.1"
-    "@bonbons/utils" "^1.2.1"
+    "@bonbons/contracts" "^1.2.1"
+    "@bonbons/di" "^1.2.2"
+    "@bonbons/plugins" "^1.2.2"
+    "@bonbons/utils" "^1.2.2"
     iconv-lite "0.4.23"
 
-"@bonbons/core@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@bonbons/core/-/core-1.2.3.tgz#a6c6d52f6f570cb402fe95f3941cd54d08f1a4c8"
+"@bonbons/core@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@bonbons/core/-/core-1.2.4.tgz#67402699b884376db473315f6f7d3780637f00ab"
   dependencies:
-    "@bonbons/contracts" "^1.2.0"
-    "@bonbons/controllers" "^1.2.1"
-    "@bonbons/decorators" "^1.2.0"
-    "@bonbons/di" "^1.2.0"
-    "@bonbons/options" "^1.2.0"
-    "@bonbons/pipes" "^1.2.0"
-    "@bonbons/plugins" "^1.2.1"
-    "@bonbons/utils" "^1.2.0"
+    "@bonbons/contracts" "^1.2.1"
+    "@bonbons/controllers" "^1.2.2"
+    "@bonbons/decorators" "^1.2.1"
+    "@bonbons/di" "^1.2.2"
+    "@bonbons/options" "^1.2.1"
+    "@bonbons/pipes" "^1.2.2"
+    "@bonbons/plugins" "^1.2.2"
+    "@bonbons/utils" "^1.2.2"
 
-"@bonbons/decorators@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@bonbons/decorators/-/decorators-1.2.0.tgz#41df257a568ef2c1f2ef76ff5bfb61b733f6e425"
-  dependencies:
-    "@bonbons/contracts" "^1.2.0"
-    "@bonbons/di" "^1.2.0"
-    "@bonbons/utils" "^1.2.1"
-    reflect-metadata "0.1.12"
-
-"@bonbons/di@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@bonbons/di/-/di-1.2.0.tgz#e545357a52cb325849600c689ddcaec0e2ba27b2"
-  dependencies:
-    "@bonbons/contracts" "^1.2.0"
-    "@bonbons/utils" "^1.2.1"
-    reflect-metadata "0.1.12"
-
-"@bonbons/options@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@bonbons/options/-/options-1.2.0.tgz#c778bb0bfcf81e918f16025ac92394ed72034325"
-  dependencies:
-    "@bonbons/contracts" "^1.2.0"
-
-"@bonbons/pipes@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@bonbons/pipes/-/pipes-1.2.0.tgz#63bdfd9e68516846aba2adcad2afcc39e2022874"
-  dependencies:
-    "@bonbons/contracts" "^1.2.0"
-    "@bonbons/di" "^1.2.0"
-    "@bonbons/utils" "^1.2.1"
-
-"@bonbons/plugins@^1.2.1":
+"@bonbons/decorators@^1.2.1":
   version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@bonbons/plugins/-/plugins-1.2.1.tgz#baebece441ad5d4515d258d149e9ed3e1c77018b"
+  resolved "https://registry.yarnpkg.com/@bonbons/decorators/-/decorators-1.2.1.tgz#9190e2be9f3481cd606eb94cbd281f64ccb10c48"
   dependencies:
-    "@bonbons/contracts" "^1.2.0"
-    "@bonbons/di" "^1.2.0"
-    "@bonbons/utils" "^1.2.1"
+    "@bonbons/contracts" "^1.2.1"
+    "@bonbons/di" "^1.2.2"
+    "@bonbons/utils" "^1.2.2"
+    reflect-metadata "0.1.12"
+
+"@bonbons/di@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@bonbons/di/-/di-1.2.2.tgz#79e795cb20644fc58a2072266a11407fc0f82390"
+  dependencies:
+    "@bonbons/contracts" "^1.2.1"
+    "@bonbons/utils" "^1.2.2"
+    reflect-metadata "0.1.12"
+
+"@bonbons/options@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@bonbons/options/-/options-1.2.1.tgz#1135203c46bb2ca6e6c5e9f4283db59cad37b8a9"
+  dependencies:
+    "@bonbons/contracts" "^1.2.1"
+
+"@bonbons/pipes@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@bonbons/pipes/-/pipes-1.2.2.tgz#e1446560d27c4a667e9d9f4dffe630a82dae123d"
+  dependencies:
+    "@bonbons/contracts" "^1.2.1"
+    "@bonbons/di" "^1.2.2"
+    "@bonbons/utils" "^1.2.2"
+
+"@bonbons/plugins@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@bonbons/plugins/-/plugins-1.2.2.tgz#1f7f55120de543715f8657150e63e58d25b1a1da"
+  dependencies:
+    "@bonbons/contracts" "^1.2.1"
+    "@bonbons/di" "^1.2.2"
+    "@bonbons/utils" "^1.2.2"
     ejs "2.6.1"
 
-"@bonbons/utils@^1.2.0", "@bonbons/utils@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@bonbons/utils/-/utils-1.2.1.tgz#e7cd8046cad376dd55f1de098a3aab4316d5c5ef"
+"@bonbons/utils@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@bonbons/utils/-/utils-1.2.2.tgz#9829e7a55187193696f9304a90f0a82530a1515a"
   dependencies:
-    "@bonbons/contracts" "^1.2.0"
+    "@bonbons/contracts" "^1.2.1"
     camelcase "5.0.0"
     cerialize "0.1.18"
     decamelize "2.0.0"

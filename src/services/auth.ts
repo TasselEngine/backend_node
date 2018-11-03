@@ -35,7 +35,6 @@ export class AuthService {
   }
 
   private get identity(): Identity {
-    console.log(this.injector);
     return this.injector.get(Identity);
   }
 
@@ -67,7 +66,6 @@ export class AuthService {
   public validate(token?: string): IAuthorizeData {
     const [errorType, authorize] = this.decrypt(token || "");
     const identity = this.identity;
-    console.log(identity);
     identity["$authorize"] = {
       account: authorize.account,
       uid: authorize.uid

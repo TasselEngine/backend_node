@@ -16,7 +16,7 @@ export class AuthPipe extends PipeMiddleware<AuthOptions> implements PipeOnInit 
     console.log("auth pipe is init.")
   }
 
-  async process(next?: (() => Promise<any>) | undefined): Promise<void> {
+  async process(): Promise<void> {
     const { ignore } = this.params;
     const url = this.context.request.url;
     const has = (ignore || []).some(path => url.indexOf(path) >= 0);
@@ -28,7 +28,6 @@ export class AuthPipe extends PipeMiddleware<AuthOptions> implements PipeOnInit 
       }
       console.log(authorize);
     }
-    await (next && next());
   }
 
 
