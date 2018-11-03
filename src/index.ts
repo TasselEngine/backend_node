@@ -9,9 +9,11 @@ import {
 import { MainController } from "./controllers/main";
 import { AuthService } from "./services/auth";
 import { GlobalAUth } from "./plugins/auth";
+import { Identity } from "./services/identity";
 
 Bonbons.Create()
-  .singleton(AuthService)
+  .scoped(Identity)
+  .scoped(AuthService)
   .controller(MainController)
   .pipe(GlobalAUth({ ignore: ["/app/index", "/app/login"] }))
   .option(ENV_MODE, { mode: "development", trace: true })

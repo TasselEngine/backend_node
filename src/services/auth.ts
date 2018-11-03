@@ -1,5 +1,6 @@
 import C from "crypto-js";
-import { Injectable } from "@bonbons/core";
+import { Injectable, InjectService } from "@bonbons/core";
+import { Identity } from "./identity";
 
 interface IAuthorizeInfo {
   account: string;
@@ -21,6 +22,8 @@ const INIT_VECTOR = C.enc.Utf8.parse(PRIMARY_KEY);
 @Injectable()
 export class AuthService {
 
+  constructor(private injector: InjectService) { }
+
   private readonly config = {
     iv: INIT_VECTOR,
     mode: C.mode.CBC,
@@ -29,6 +32,11 @@ export class AuthService {
 
   private get currentStamp() {
     return new Date().getTime();
+  }
+
+  private get identity(): Identity {
+    console.log(this.injector);
+    return this.injector.get(Identity);
   }
 
   protected encrypt(info: IAuthorizeInfo) {
@@ -58,6 +66,12 @@ export class AuthService {
 
   public validate(token?: string): IAuthorizeData {
     const [errorType, authorize] = this.decrypt(token || "");
+    const identity = this.identity;
+    console.log(identity);
+    identity["$authorize"] = {
+      account: authorize.account,
+      uid: authorize.uid
+    };
     return {
       valid: errorType === "VALID",
       errorType,

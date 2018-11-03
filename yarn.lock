@@ -20,9 +20,9 @@
     "@bonbons/utils" "^1.2.1"
     iconv-lite "0.4.23"
 
-"@bonbons/core@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@bonbons/core/-/core-1.2.1.tgz#e599d5c45d1f678f0c00b655b92dbcc9fe0f6134"
+"@bonbons/core@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@bonbons/core/-/core-1.2.3.tgz#a6c6d52f6f570cb402fe95f3941cd54d08f1a4c8"
   dependencies:
     "@bonbons/contracts" "^1.2.0"
     "@bonbons/controllers" "^1.2.1"

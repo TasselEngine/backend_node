@@ -28,7 +28,7 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
-    "@bonbons/core": "^1.2.1",
+    "@bonbons/core": "^1.2.3",
     "crypto-js": "^3.1.9-1"
   }
 }
