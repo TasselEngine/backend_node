@@ -1,8 +1,13 @@
 import { ROUTER } from "./base";
 import { Controller, Route, Method, Pipes } from "@bonbons/core";
+import { AuthService } from "../services/auth";
 
 @Controller("app")
 export class MainController extends ROUTER {
+
+  constructor(private auth: AuthService) {
+    super();
+  }
 
   @Method("GET")
   @Route("/index")
@@ -10,6 +15,17 @@ export class MainController extends ROUTER {
     return this.toJSON({
       code: 0,
       message: "hello world."
+    })
+  }
+
+  @Method("POST")
+  @Route("/login")
+  public Login() {
+    const token = this.auth.authorize("admin", "10000", 7);
+    return this.toJSON({
+      code: 0,
+      message: "success",
+      data: token
     })
   }
 

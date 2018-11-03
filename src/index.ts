@@ -13,7 +13,7 @@ import { GlobalAUth } from "./plugins/auth";
 Bonbons.Create()
   .singleton(AuthService)
   .controller(MainController)
-  .pipe(GlobalAUth({ ignore: ["/app/index"] }))
+  .pipe(GlobalAUth({ ignore: ["/app/index", "/app/login"] }))
   .option(ENV_MODE, { mode: "development", trace: true })
   .option(DEPLOY_MODE, { port: 3000 })
   .option(TPL_RENDER_OPTIONS, { root: PATH("views") })

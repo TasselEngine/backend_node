@@ -22,10 +22,11 @@ export class AuthPipe extends PipeMiddleware<AuthOptions> implements PipeOnInit 
     const has = (ignore || []).some(path => url.indexOf(path) >= 0);
     if (!has) {
       const token = this.context.request.headers["auth_token"];
-      console.log(`auth -> [${token || "no-token"}] check is ${this.auth.validate(token)}`);
-      if (!this.auth.validate(token)) {
+      const authorize = this.auth.validate(token);
+      if (!authorize.valid) {
         throw new Error("auth token check failed");
       }
+      console.log(authorize);
     }
     await (next && next());
   }
