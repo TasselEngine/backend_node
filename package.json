@@ -1,0 +1,33 @@
+{
+  "name": "backend_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --inspect=64001 -r ts-node/register ./start.js",
+    "nodemon": "./node_modules/nodemon/bin/nodemon.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TasselEngine/backend_node.git"
+  },
+  "author": "bws",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TasselEngine/backend_node/issues"
+  },
+  "homepage": "https://github.com/TasselEngine/backend_node#readme",
+  "devDependencies": {
+    "@types/koa": "^2.0.46",
+    "@types/koa-bodyparser": "^5.0.1",
+    "@types/koa-router": "^7.0.32",
+    "@types/node": "^10.12.2",
+    "@types/reflect-metadata": "^0.1.0",
+    "nodemon": "^1.18.5",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "@bonbons/core": "^1.2.0"
+  }
+}
