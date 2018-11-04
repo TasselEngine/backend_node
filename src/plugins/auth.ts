@@ -1,6 +1,6 @@
 import { Pipe, PipeOnInit, PipeMiddleware, PipeFactory } from "@bonbons/core";
-import { AuthService } from "../services/auth";
-import { Identity } from "../services/identity";
+import { AuthService } from "../services/singleton/auth";
+import { Identity } from "../services/scoped/identity";
 
 interface AuthOptions {
   ignore: string[];
@@ -36,4 +36,4 @@ export class AuthPipe extends PipeMiddleware<AuthOptions> implements PipeOnInit 
 
 }
 
-export const GlobalAUth = PipeFactory.generic(AuthPipe);
+export const GlobalAuth = PipeFactory.generic(AuthPipe);

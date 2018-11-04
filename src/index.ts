@@ -7,15 +7,15 @@ import {
   ERROR_RENDER_OPRIONS
 } from "@bonbons/core";
 import { MainController } from "./controllers/main";
-import { AuthService } from "./services/auth";
-import { GlobalAUth } from "./plugins/auth";
-import { Identity } from "./services/identity";
+import { AuthService } from "./services/singleton/auth";
+import { GlobalAuth } from "./plugins/auth";
+import { Identity } from "./services/scoped/identity";
 
 Bonbons.Create()
   .scoped(Identity)
   .singleton(AuthService)
   .controller(MainController)
-  .pipe(GlobalAUth({ ignore: ["/app/index", "/app/login"] }))
+  .pipe(GlobalAuth({ ignore: ["/app/index", "/app/login"] }))
   .option(ENV_MODE, { mode: "development", trace: true })
   .option(DEPLOY_MODE, { port: 3000 })
   .option(TPL_RENDER_OPTIONS, { root: PATH("views") })

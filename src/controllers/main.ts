@@ -1,7 +1,7 @@
 import { ROUTER } from "./base";
 import { Controller, Route, Method } from "@bonbons/core";
-import { AuthService } from "../services/auth";
-import { Identity } from "../services/identity";
+import { AuthService } from "../services/singleton/auth";
+import { Identity } from "../services/scoped/identity";
 
 @Controller("app")
 export class MainController extends ROUTER {
