@@ -1,17 +1,10 @@
 import C from "crypto-js";
 import { Injectable } from "@bonbons/core";
-
-interface IAuthorizeInfo {
-  account: string;
-  expires: number;
-  uid: string;
-}
-
-type ErrorType = "INVALID_TOKEN" | "EXPIRES" | "VALID";
-
-interface IAuthorizeData extends IAuthorizeInfo {
-  valid: ErrorType;
-}
+import {
+  IAuthorizeInfo,
+  ErrorType,
+  IAuthorizeData
+} from "../../contracts/identity";
 
 const PRIMARY_KEY = "h6fx86gb40kg6ch3";
 const AES_KEY = C.enc.Utf8.parse(PRIMARY_KEY);

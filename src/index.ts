@@ -9,10 +9,11 @@ import {
 import { MainController } from "./controllers/main";
 import { AuthService } from "./services/singleton/auth";
 import { GlobalAuth } from "./plugins/auth";
+import { IIdentity } from "./contracts/identity";
 import { Identity } from "./services/scoped/identity";
 
 Bonbons.Create()
-  .scoped(Identity)
+  .scoped(IIdentity, Identity)
   .singleton(AuthService)
   .controller(MainController)
   .pipe(GlobalAuth({ ignore: ["/app/index", "/app/login"] }))
@@ -20,7 +21,7 @@ Bonbons.Create()
   .option(DEPLOY_MODE, { port: 3000 })
   .option(TPL_RENDER_OPTIONS, { root: PATH("views") })
   .option(ERROR_RENDER_OPRIONS, { root: PATH("views/errors") })
-  .start(() => {
+  .start((configs) => {
     console.log("server is running 3000.");
   });
 

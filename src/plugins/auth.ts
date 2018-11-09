@@ -1,6 +1,6 @@
 import { Pipe, PipeOnInit, PipeMiddleware, PipeFactory } from "@bonbons/core";
 import { AuthService } from "../services/singleton/auth";
-import { Identity } from "../services/scoped/identity";
+import { IIdentity } from "../contracts/identity";
 
 interface AuthOptions {
   ignore: string[];
@@ -9,7 +9,7 @@ interface AuthOptions {
 @Pipe()
 export class AuthPipe extends PipeMiddleware<AuthOptions> implements PipeOnInit {
 
-  constructor(private auth: AuthService, private identity: Identity) {
+  constructor(private auth: AuthService, private identity: IIdentity) {
     super();
   }
 
@@ -26,10 +26,7 @@ export class AuthPipe extends PipeMiddleware<AuthOptions> implements PipeOnInit 
       const authorize = this.auth.validate(token);
       if (authorize.valid === "INVALID_TOKEN") throw new Error("auth token is invalid");
       if (authorize.valid === "EXPIRES") throw new Error("auth token is expired");
-      this.identity["$authorize"] = {
-        account: authorize.account,
-        uid: authorize.uid
-      };
+      this.identity.init(authorize);
     }
   }
 
