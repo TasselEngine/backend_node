@@ -29,7 +29,7 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
-    "@bonbons/core": "1.3.1",
+    "@bonbons/core": "1.3.9",
     "crypto-js": "3.1.9-1"
   }
 }

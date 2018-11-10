@@ -1,10 +1,12 @@
 import { ROUTER } from "./base";
-import { Controller, Route, Method, FromBody } from "@bonbons/core";
+import { Controller, Route, Method, FromBody, Pipes } from "@bonbons/core";
 import { AuthService } from "../services/singleton/auth";
 import { IIdentity, Role } from "../contracts/identity";
 import { LoginForm } from "../models/form/login";
+import { LOGINED } from "../plugins/authorize";
 
 @Controller("app")
+@Pipes([LOGINED])
 export class MainController extends ROUTER {
 
   constructor(private auth: AuthService, private identity: IIdentity) {
@@ -22,6 +24,7 @@ export class MainController extends ROUTER {
 
   @Method("POST")
   @Route("/login")
+  @Pipes([])
   public Login(@FromBody() data: LoginForm) {
     const infos = fakeLogin(data.account, data.password);
     const token = this.auth.authorize(7, infos);
