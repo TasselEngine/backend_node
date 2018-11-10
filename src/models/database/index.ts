@@ -9,11 +9,15 @@ export async function init() {
     try {
       const res = await db.collection("demo").updateOne({
         someKey: 123456
-      }, { $set: {} }, { upsert: true });
+      }, {
+        $set: {
+          someKey: 665544
+        }
+        }, { upsert: true });
 
       console.log(`res => ${JSON.stringify(res)}`);
     } catch (_) {
-
+      console.log(_);
     }
   } catch (e) {
     console.log(e);
