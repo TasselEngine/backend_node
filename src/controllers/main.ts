@@ -25,8 +25,8 @@ export class MainController extends ROUTER {
   @Method("POST")
   @Route("/login")
   @Pipes([])
-  public Login(@FromBody() data: LoginForm) {
-    const infos = fakeLogin(data.account, data.password);
+  public async Login(@FromBody() data: LoginForm) {
+    const infos = await fakeLogin(data.account, data.password);
     const token = this.auth.authorize(7, infos);
     return this.toJSON({
       code: 0,
@@ -55,7 +55,7 @@ export class MainController extends ROUTER {
 
 }
 
-function fakeLogin(account: string, password: string) {
+async function fakeLogin(account: string, password: string) {
   return {
     uid: "fake_uid",
     account,
