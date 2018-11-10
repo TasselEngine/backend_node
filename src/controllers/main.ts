@@ -1,7 +1,7 @@
 import { ROUTER } from "./base";
 import { Controller, Route, Method, FromBody } from "@bonbons/core";
 import { AuthService } from "../services/singleton/auth";
-import { IIdentity } from "../contracts/identity";
+import { IIdentity, Role } from "../contracts/identity";
 import { LoginForm } from "../models/form/login";
 
 @Controller("app")
@@ -23,8 +23,8 @@ export class MainController extends ROUTER {
   @Method("POST")
   @Route("/login")
   public Login(@FromBody() data: LoginForm) {
-    const uid = fakeLogin(data.account, data.password);
-    const token = this.auth.authorize(data.account, uid, 7);
+    const infos = fakeLogin(data.account, data.password);
+    const token = this.auth.authorize(7, infos);
     return this.toJSON({
       code: 0,
       message: "success",
@@ -35,7 +35,7 @@ export class MainController extends ROUTER {
   @Method("GET")
   @Route("/demo?{id}&{name}")
   public GetDemo(id: number, name: string) {
-    const { uid, account } = this.identity;
+    const { uid, account, role } = this.identity;
     return this.toJSON({
       code: 0,
       message: "success",
@@ -43,7 +43,8 @@ export class MainController extends ROUTER {
         display: { id, name },
         logined: {
           id: uid,
-          account
+          account,
+          role
         }
       }
     });
@@ -52,5 +53,9 @@ export class MainController extends ROUTER {
 }
 
 function fakeLogin(account: string, password: string) {
-  return "fake_uid";
+  return {
+    uid: "fake_uid",
+    account,
+    role: Role.User
+  };
 }

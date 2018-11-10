@@ -3,12 +3,19 @@ import { Injectable } from "@bonbons/core";
 import {
   IAuthorizeInfo,
   ErrorType,
-  IAuthorizeData
+  IAuthorizeData,
+  Role
 } from "../../contracts/identity";
 
 const PRIMARY_KEY = "h6fx86gb40kg6ch3";
 const AES_KEY = C.enc.Utf8.parse(PRIMARY_KEY);
 const INIT_VECTOR = C.enc.Utf8.parse(PRIMARY_KEY);
+
+interface IUserInfo {
+  account: string;
+  uid: string;
+  role: Role;
+}
 
 @Injectable()
 export class AuthService {
@@ -34,16 +41,15 @@ export class AuthService {
       if (("expires" in auth) && Number(auth.expires) < this.currentStamp) throw "EXPIRES";
       return ["VALID", auth];
     } catch (e) {
-      const common = { account: "", uid: "" };
+      const common = { account: "", uid: "", role: Role.None };
       if (e === "EXPIRES") return [e, { ...common, expires: 0 }];
       return ["INVALID_TOKEN", { ...common, expires: -1 }];
     }
   }
 
-  public authorize(account: string, uid: string, days: number): string {
+  public authorize(days: number, infos: IUserInfo): string {
     return this.encrypt({
-      account,
-      uid,
+      ...infos,
       expires: this.createStamp(days)
     }).toString();
   }

@@ -8,7 +8,7 @@ import {
 } from "@bonbons/core";
 import { MainController } from "./controllers/main";
 import { AuthService } from "./services/singleton/auth";
-import { GlobalAuth } from "./plugins/auth";
+import { Authentication } from "./plugins/authentication";
 import { IIdentity } from "./contracts/identity";
 import { Identity } from "./services/scoped/identity";
 
@@ -16,7 +16,7 @@ Bonbons.Create()
   .scoped(IIdentity, Identity)
   .singleton(AuthService)
   .controller(MainController)
-  .pipe(GlobalAuth({ ignore: ["/app/index", "/app/login"] }))
+  .pipe(Authentication({ ignore: ["/app/login"] }))
   .option(ENV_MODE, { mode: "development", trace: true })
   .option(DEPLOY_MODE, { port: 3000 })
   .option(TPL_RENDER_OPTIONS, { root: PATH("views") })

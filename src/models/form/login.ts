@@ -1,4 +1,4 @@
-import { Deserialize } from "@bonbons/utils";
+import { Deserialize } from "@bonbons/core";
 
 export class LoginForm {
 
