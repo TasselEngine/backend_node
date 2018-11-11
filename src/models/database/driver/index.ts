@@ -91,12 +91,7 @@ class MongoDBInstance {
   public async getCollection<T>(type: IConstructor<T>): Promise<IMongoCollection<T>> {
     const name = CollectionSet.get(type) || null;
     if (name === null) throw new Error("no collection name provided.");
-    const define = tryGetDefine(type);
-    const collection = await this.db.createCollection<T>(name, {
-      validator: {
-        $jsonSchema: define.validator
-      }
-    });
+    const collection = await this.db.collection(name);
     return {
       ...defaultHandler,
       collection,
@@ -105,7 +100,17 @@ class MongoDBInstance {
   }
 
   public async defineCollection<T>(type: IConstructor<T>) {
-    return this.getCollection(type);
+    const name = CollectionSet.get(type) || null;
+    if (name === null) throw new Error("no collection name provided.");
+    const define = tryGetDefine(type);
+    const collection = await this.db.createCollection<T>(name, {
+      validator: { $jsonSchema: define.validator }
+    });
+    return {
+      ...defaultHandler,
+      collection,
+      type
+    };
   }
 
 
