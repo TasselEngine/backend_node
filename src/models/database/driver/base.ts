@@ -1,3 +1,9 @@
+import db from "mongodb";
+
+import Long = db.Long;
+import Decimal = db.Decimal128;
+import Double = db.Double;
+import Timestamp = db.Timestamp;
 
 export interface IConstructor<T> {
   new(...args: any[]): T;
@@ -41,6 +47,7 @@ export interface IMongoPreValidator {
     [prop: string]: {
       alias: string | undefined;
       realType: IConstructor<any>;
+      ignoreTransform: boolean;
     };
   };
 }
@@ -94,9 +101,17 @@ export function tryGetProperty<T>(type: IConstructor<T>, name: string, alias?: s
     };
     preValidator.properties[name] = prePro = {
       alias,
-      realType: String
+      realType: String,
+      ignoreTransform: false
     };
   }
   prePro.alias = prePro.alias || alias;
   return property;
 }
+
+export {
+  Long as Int64,
+  Decimal,
+  Double,
+  Timestamp
+};

@@ -2,7 +2,9 @@ import { TYPE_META_KEY } from "@bonbons/core/dist/src/di";
 import {
   IConstructor, tryGetDefine,
   CollectionSet, tryGetProperty,
-  BsonType
+  BsonType,
+  Int64,
+  Decimal
 } from "./base";
 
 interface IPropertyOptions {
@@ -114,12 +116,18 @@ function defineManualyType(prototype: any, propertyKey: string, type: BsonType) 
   const define = tryGetDefine(prototype.constructor);
   const preLoad = define.preValidator.properties[propertyKey];
   property.bsonType = type;
+  const onSerialized = prototype.constructor.OnSerialized || noop;
   switch (type) {
     case BsonType.Number:
-    case BsonType.Int32:
-    case BsonType.Int64:
-    case BsonType.Decimal: preLoad.realType = Number; break;
+    case BsonType.Int32: preLoad.realType = Number; break;
+    case BsonType.Int64: // no transform for long and decimal
+    case BsonType.Decimal:
+      preLoad.realType = Number;
+      preLoad.ignoreTransform = true;
+      break;
     case BsonType.Boolean: preLoad.realType = Boolean; break;
     default: preLoad.realType = String;
   }
 }
+
+const noop = () => { };

@@ -1,5 +1,5 @@
 import { Collection, PropertyType, PropertyName, Nullable, ErrorMessage, EnumType, Bson } from "../database/driver/decorator";
-import { BsonType } from "../database/driver/base";
+import { BsonType, Int64 } from "../database/driver/base";
 
 @Bson()
 export class ChildNode {
@@ -27,10 +27,10 @@ export class TestModel {
   @PropertyType(BsonType.String)
   public name = "";
 
-  @PropertyType(BsonType.Int32)
+  @PropertyType(BsonType.Int64)
   @PropertyName("age")
-  @ErrorMessage("age shouldn't be empty and must be number value.")
-  public ageNum = 0;
+  @ErrorMessage("age shouldn't be empty and must be long value.")
+  public ageNum: Int64 = Int64.fromString("5436356");
 
   @PropertyType(BsonType.String)
   @Nullable()

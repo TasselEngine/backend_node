@@ -18,10 +18,20 @@ export class Connection {
     });
   }
 
-  private initDefinitions(type: IConstructor<any>) {
+  private initDefinitions<T = any>(type: IConstructor<T>) {
     const define = tryGetDefine(type);
     const { preValidator: pre, validator } = define;
     const { nullable, properties: preload } = pre;
+    const ignoreList = Object.keys(preload).map(k => ({ key: k, data: preload[k] })).filter(i => i.data.ignoreTransform);
+    console.log(ignoreList.map(i => i.key));
+    // @ts-ignore ignore static transform
+    type.OnSerialized = (instance: T, json: any) => {
+      for (const item of ignoreList) {
+        const { key, data } = item;
+        json[data.alias || key] = (<any>instance)[key];
+        console.log(json);
+      }
+    };
     Object.keys(validator.properties).forEach(key => {
       let alias = preload[key].alias;
       const realType = preload[key].realType;
@@ -93,7 +103,7 @@ class MongoDBInstance {
     if (name === null) throw new Error("no collection name provided.");
     const collection = await this.db.collection(name);
     return {
-      ...defaultHandler,
+      ...(defaultHandler as IMongoCollection<T>),
       collection,
       type
     };
@@ -107,7 +117,7 @@ class MongoDBInstance {
       validator: { $jsonSchema: define.validator }
     });
     return {
-      ...defaultHandler,
+      ...(defaultHandler as IMongoCollection<T>),
       collection,
       type
     };
@@ -120,5 +130,5 @@ interface IMongoCollection<T> {
   readonly collection: db.Collection<any>;
   readonly type: IConstructor<T>;
   insertOne(entry: T, options?: db.CollectionInsertOneOptions): Promise<db.InsertOneWriteOpResult>;
-  insertMany(entry: T[], options?: db.CollectionInsertManyOptions): Promise<db.InsertWriteOpResult>;
+  insertMany(entries: T[], options?: db.CollectionInsertManyOptions): Promise<db.InsertWriteOpResult>;
 }
