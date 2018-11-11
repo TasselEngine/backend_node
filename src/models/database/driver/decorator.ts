@@ -10,6 +10,7 @@ interface IPropertyOptions {
   type: BsonType;
   nullable: boolean;
   description: string;
+  enum: string[];
 }
 
 export function Bson(options?: {}) {
@@ -26,11 +27,17 @@ export function Collection(name: string) {
 }
 
 export function BsonProperty(meta?: Partial<IPropertyOptions>) {
-  const { nullable, type, description = undefined } = meta || { nullable: false, type: undefined };
+  const {
+    nullable = false,
+    type = undefined,
+    description = undefined,
+    enum: enumV = undefined
+  } = meta || {};
   return function bsonProperty(prototype: any, propertyKey: string, descriptor?: PropertyDescriptor) {
     const property = tryGetProperty(prototype.constructor, propertyKey);
     defineAlias(prototype, propertyKey);
     if (description) property.description = description;
+    if (enumV) property.enum = enumV;
     if (nullable) defineNullable(prototype, propertyKey);
     if (type) {
       defineManualyType(prototype, propertyKey, type);
@@ -58,6 +65,12 @@ export function Nullable() {
   };
 }
 
+export function EnumType(enumValue: any) {
+  return function enumType(prototype: any, propertyKey: string, descriptor?: PropertyDescriptor) {
+    BsonProperty({ enum: Object.getOwnPropertyNames(enumValue).map(k => enumValue[k]) })(prototype, propertyKey);
+  };
+}
+
 export function ErrorMessage(desc: string) {
   return function errorMessage(prototype: any, propertyKey: string, descriptor?: PropertyDescriptor) {
     BsonProperty({ description: desc })(prototype, propertyKey);
@@ -77,14 +90,14 @@ function defineAutoType(prototype: any, propertyKey: string) {
   const property = tryGetProperty(prototype.constructor, propertyKey);
   const type = Reflect.getOwnMetadata(TYPE_META_KEY, prototype, propertyKey);
   switch (type) {
-    case String: property.bsonType.push(BsonType.String); break;
-    case Number: property.bsonType.push(BsonType.Double); break;
-    case Boolean: property.bsonType.push(BsonType.Boolean); break;
-    default: property.bsonType.push(BsonType.Object); break;
+    case String: property.bsonType = BsonType.String; break;
+    case Number: property.bsonType = BsonType.Double; break;
+    case Boolean: property.bsonType = BsonType.Boolean; break;
+    default: property.bsonType = BsonType.Object; break;
   }
 }
 
 function defineManualyType(prototype: any, propertyKey: string, type: BsonType) {
   const property = tryGetProperty(prototype.constructor, propertyKey);
-  property.bsonType = [<BsonType>type];
+  property.bsonType = <BsonType>type;
 }

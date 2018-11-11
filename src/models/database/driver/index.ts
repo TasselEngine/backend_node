@@ -37,14 +37,11 @@ const defaultHandler: IMongoCollection<any> = {
   collection: undefined as any,
   type: undefined as any,
   insertOne(entry, options) {
-    console.log(TypedSerializer.ToObject(entry, { type: this.type }));
     return this.collection.insertOne(TypedSerializer.ToObject(entry, { type: this.type }), options);
   },
   insertMany(entries, options) {
-    const adds = entries.map(i => TypedSerializer.ToObject(i, { type: this.type }));
-    console.log(adds);
     return this.collection.insertMany(
-      TypedSerializer.ToObject(adds, { type: this.type }),
+      entries.map(i => TypedSerializer.ToObject(i, { type: this.type })),
       options
     );
   }

@@ -21,7 +21,9 @@ export enum BsonType {
   Int64 = "long",
   Decimal = "decimal",
   MinKey = "minKey",
-  MaxKey = "maxKey"
+  MaxKey = "maxKey",
+  Number = "number",
+  // @Deperecated
   // Symbol = "symbol",
   // Undefined = "undefined",
   // DBPointer = "dbPointer",
@@ -50,7 +52,7 @@ export interface IMongoValidator extends IPropertyValidator {
 }
 
 export interface IPropertyValidator {
-  bsonType: BsonType[];
+  bsonType: BsonType;
   description?: string;
   minimum?: number;
   maximum?: number;
@@ -67,7 +69,7 @@ export function tryGetDefine<T>(type: IConstructor<T>) {
     define = {
       type,
       validator: {
-        bsonType: [BsonType.Object],
+        bsonType: BsonType.Object,
         required: [],
         properties: {}
       },
@@ -87,7 +89,7 @@ export function tryGetProperty<T>(type: IConstructor<T>, name: string, alias?: s
   let prePro = preValidator.properties[name];
   if (!property) {
     validator.properties[name] = property = {
-      bsonType: []
+      bsonType: BsonType.String
     };
     preValidator.properties[name] = prePro = {
       alias
