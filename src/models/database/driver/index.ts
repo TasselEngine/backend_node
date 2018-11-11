@@ -23,13 +23,11 @@ export class Connection {
     const { preValidator: pre, validator } = define;
     const { nullable, properties: preload } = pre;
     const ignoreList = Object.keys(preload).map(k => ({ key: k, data: preload[k] })).filter(i => i.data.ignoreTransform);
-    console.log(ignoreList.map(i => i.key));
     // @ts-ignore ignore static transform
     type.OnSerialized = (instance: T, json: any) => {
       for (const item of ignoreList) {
         const { key, data } = item;
         json[data.alias || key] = (<any>instance)[key];
-        console.log(json);
       }
     };
     Object.keys(validator.properties).forEach(key => {
