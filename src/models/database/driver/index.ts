@@ -1,5 +1,5 @@
 import db from "mongodb";
-import { IConstructor, tryGetDefine, CollectionSet, BsonType } from "./base";
+import { IConstructor, tryGetDefine, CollectionSet, BsonType, DefinitionSet } from "./base";
 import { TypedSerializer, Serialize, Deserialize } from "@bonbons/core";
 
 const MongoDB = db.MongoClient;
@@ -12,7 +12,44 @@ export class Connection {
     return await new Connection(uri, { ...options }).init();
   }
 
-  constructor(private uri: string, private options: db.MongoClientOptions) { }
+  constructor(private uri: string, private options: db.MongoClientOptions) {
+    Array.from(DefinitionSet.entries()).forEach(([k, v]) => {
+      this.initDefinitions(k);
+    });
+  }
+
+  private initDefinitions(type: IConstructor<any>) {
+    const define = tryGetDefine(type);
+    const { preValidator: pre, validator } = define;
+    const { nullable, properties: preload } = pre;
+    Object.keys(validator.properties).forEach(key => {
+      let alias = preload[key].alias;
+      const realType = preload[key].realType;
+      if (alias && alias !== key) {
+        const old = validator.properties[key];
+        delete validator.properties[key];
+        validator.properties[alias] = old;
+      } else {
+        alias = key;
+      }
+      if (realType === Object) {
+        Serialize(alias)(type.prototype, key);
+        Deserialize(alias)(type.prototype, key);
+      } else {
+        Serialize(realType, alias)(type.prototype, key);
+        Deserialize(realType, alias)(type.prototype, key);
+      }
+      const index = nullable.indexOf(key);
+      if (index >= 0) {
+        nullable[index] = alias;
+        const prop = validator.properties[alias];
+        // @ts-ignore make sure it's alright
+        prop.bsonType = [prop.bsonType, BsonType.Null];
+      } else {
+        validator.required.push(alias);
+      }
+    });
+  }
 
   public async init() {
     try {
@@ -37,7 +74,6 @@ const defaultHandler: IMongoCollection<any> = {
   collection: undefined as any,
   type: undefined as any,
   insertOne(entry, options) {
-    console.log(TypedSerializer.ToObject(entry, { type: this.type }));
     return this.collection.insertOne(TypedSerializer.ToObject(entry, { type: this.type }), options);
   },
   insertMany(entries, options) {
@@ -69,36 +105,6 @@ class MongoDBInstance {
   }
 
   public async defineCollection<T>(type: IConstructor<T>) {
-    const define = tryGetDefine(type);
-    const { preValidator: pre, validator } = define;
-    const { nullable, properties: preload } = pre;
-    Object.keys(validator.properties).forEach(key => {
-      let alias = preload[key].alias;
-      const realType = preload[key].realType;
-      if (alias && alias !== key) {
-        const old = validator.properties[key];
-        delete validator.properties[key];
-        validator.properties[alias] = old;
-      } else {
-        alias = key;
-      }
-      if (realType === Object) {
-        Serialize(alias)(type.prototype, key);
-        Deserialize(alias)(type.prototype, key);
-      } else {
-        Serialize(realType, alias)(type.prototype, key);
-        Deserialize(realType, alias)(type.prototype, key);
-      }
-      const index = nullable.indexOf(key);
-      if (index >= 0) {
-        nullable[index] = alias;
-        const prop = validator.properties[alias];
-        // @ts-ignore make sure it's alright
-        prop.bsonType = [prop.bsonType, BsonType.Null];
-      } else {
-        validator.required.push(alias);
-      }
-    });
     return this.getCollection(type);
   }
 

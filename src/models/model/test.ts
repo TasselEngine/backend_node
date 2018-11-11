@@ -2,10 +2,18 @@ import { Collection, PropertyType, PropertyName, Nullable, ErrorMessage, EnumTyp
 import { BsonType } from "../database/driver/base";
 
 @Bson()
-class ChildNode {
+export class ChildNode {
+
+  constructor(initial?: Partial<ChildNode>) {
+    Object.assign(this, initial);
+  }
 
   @PropertyType(BsonType.String)
-  name = "sb";
+  public name = "sb";
+
+  @PropertyType(BsonType.Int32)
+  @PropertyName("age")
+  public ageNum = 1000;
 
 }
 
