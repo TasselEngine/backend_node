@@ -37,6 +37,6 @@ export class TestModel {
 
   @PropertyType(ChildNode)
   @Nullable()
-  public child: ChildNode | null = null;
+  public child?: ChildNode;
 
 }
