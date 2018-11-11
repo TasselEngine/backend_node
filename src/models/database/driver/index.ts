@@ -1,5 +1,5 @@
 import db from "mongodb";
-import { IConstructor, tryGetDefine, CollectionSet } from "./base";
+import { IConstructor, tryGetDefine, CollectionSet, BsonType } from "./base";
 import { TypedSerializer, Serialize, Deserialize } from "@bonbons/core";
 
 const MongoDB = db.MongoClient;
@@ -37,6 +37,7 @@ const defaultHandler: IMongoCollection<any> = {
   collection: undefined as any,
   type: undefined as any,
   insertOne(entry, options) {
+    console.log(TypedSerializer.ToObject(entry, { type: this.type }));
     return this.collection.insertOne(TypedSerializer.ToObject(entry, { type: this.type }), options);
   },
   insertMany(entries, options) {
@@ -55,7 +56,6 @@ class MongoDBInstance {
     const name = CollectionSet.get(type) || null;
     if (name === null) throw new Error("no collection name provided.");
     const define = tryGetDefine(type);
-    console.log(define);
     const collection = await this.db.createCollection<T>(name, {
       validator: {
         $jsonSchema: define.validator
@@ -74,6 +74,7 @@ class MongoDBInstance {
     const { nullable, properties: preload } = pre;
     Object.keys(validator.properties).forEach(key => {
       let alias = preload[key].alias;
+      const realType = preload[key].realType;
       if (alias && alias !== key) {
         const old = validator.properties[key];
         delete validator.properties[key];
@@ -81,11 +82,19 @@ class MongoDBInstance {
       } else {
         alias = key;
       }
-      Serialize(alias)(type.prototype, key);
-      Deserialize(alias)(type.prototype, key);
+      if (realType === Object) {
+        Serialize(alias)(type.prototype, key);
+        Deserialize(alias)(type.prototype, key);
+      } else {
+        Serialize(realType, alias)(type.prototype, key);
+        Deserialize(realType, alias)(type.prototype, key);
+      }
       const index = nullable.indexOf(key);
       if (index >= 0) {
         nullable[index] = alias;
+        const prop = validator.properties[alias];
+        // @ts-ignore make sure it's alright
+        prop.bsonType = [prop.bsonType, BsonType.Null];
       } else {
         validator.required.push(alias);
       }

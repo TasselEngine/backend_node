@@ -40,6 +40,7 @@ export interface IMongoPreValidator {
   properties: {
     [prop: string]: {
       alias: string | undefined;
+      realType: IConstructor<any>;
     };
   };
 }
@@ -92,7 +93,8 @@ export function tryGetProperty<T>(type: IConstructor<T>, name: string, alias?: s
       bsonType: BsonType.String
     };
     preValidator.properties[name] = prePro = {
-      alias
+      alias,
+      realType: String
     };
   }
   prePro.alias = prePro.alias || alias;

@@ -14,7 +14,9 @@ export async function init() {
       name: "miao17game",
       ageNum: 23,
       likes: "3rrgvw3eg",
-      data: BsonType.BinaryData
+      data: BsonType.BinaryData,
+      gender: true,
+      child: null
     }]);
   } catch (e) {
     console.log(e);
