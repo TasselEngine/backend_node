@@ -11,6 +11,12 @@ export async function init() {
       name: "i'm your father",
       child: new ChildNode({})
     }));
+    await collection.insertOne({
+      name: "i'm your father",
+      ageNum: Int64.fromString("234"),
+      gender: true,
+      data: BsonType.Date
+    });
     await collection.insertMany([new TestModel({
       name: "i'm your father fk02",
       child: new ChildNode({})

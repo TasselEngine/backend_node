@@ -81,12 +81,17 @@ export class Connection {
 const defaultHandler: IMongoCollection<any> = {
   collection: undefined as any,
   type: undefined as any,
+  transform(entry) {
+    const { type } = this;
+    entry.__proto__ = type.prototype;
+    return TypedSerializer.ToObject(entry, { type });
+  },
   insertOne(entry, options) {
-    return this.collection.insertOne(TypedSerializer.ToObject(entry, { type: this.type }), options);
+    return this.collection.insertOne(this.transform(entry), options);
   },
   insertMany(entries, options) {
     return this.collection.insertMany(
-      entries.map(i => TypedSerializer.ToObject(i, { type: this.type })),
+      entries.map(i => this.transform(i)),
       options
     );
   }
@@ -127,6 +132,7 @@ class MongoDBInstance {
 interface IMongoCollection<T> {
   readonly collection: db.Collection<any>;
   readonly type: IConstructor<T>;
+  transform(entry: T): any;
   insertOne(entry: T, options?: db.CollectionInsertOneOptions): Promise<db.InsertOneWriteOpResult>;
   insertMany(entries: T[], options?: db.CollectionInsertManyOptions): Promise<db.InsertWriteOpResult>;
 }
