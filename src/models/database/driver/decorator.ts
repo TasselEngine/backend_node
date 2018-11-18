@@ -116,7 +116,6 @@ function defineManualyType(prototype: any, propertyKey: string, type: BsonType) 
   const define = tryGetDefine(prototype.constructor);
   const preLoad = define.preValidator.properties[propertyKey];
   property.bsonType = type;
-  const onSerialized = prototype.constructor.OnSerialized || noop;
   switch (type) {
     case BsonType.Number:
     case BsonType.Int32: preLoad.realType = Number; break;
@@ -129,5 +128,3 @@ function defineManualyType(prototype: any, propertyKey: string, type: BsonType) 
     default: preLoad.realType = String;
   }
 }
-
-const noop = () => { };

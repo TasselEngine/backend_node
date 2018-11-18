@@ -1,6 +1,7 @@
 import db from "mongodb";
 import { IConstructor, tryGetDefine, CollectionSet, BsonType, DefinitionSet } from "./base";
 import { TypedSerializer, Serialize, Deserialize } from "@bonbons/core";
+import { IQueryFilter, MongoFilter, IFilterMeta, IQueryWhere } from "./filter";
 
 const MongoDB = db.MongoClient;
 
@@ -78,13 +79,21 @@ export class Connection {
 
 }
 
-const defaultHandler: IMongoCollection<any> = {
+interface IMongoCollectionBase<T = any> extends IMongoCollection<T> {
+  transform(entry: T): any;
+  getKeyMap(type?: IConstructor<T>): any;
+}
+
+const defaultHandler: IMongoCollectionBase = {
   collection: undefined as any,
   type: undefined as any,
   transform(entry) {
     const { type } = this;
     entry.__proto__ = type.prototype;
     return TypedSerializer.ToObject(entry, { type });
+  },
+  getKeyMap(type) {
+
   },
   insertOne(entry, options) {
     return this.collection.insertOne(this.transform(entry), options);
@@ -94,8 +103,30 @@ const defaultHandler: IMongoCollection<any> = {
       entries.map(i => this.transform(i)),
       options
     );
+  },
+  find(arg: IQueryFilter<any> | ((filter: IQueryFilter<any>) => IQueryFilter<any>)) {
+    let filter = arg as IQueryFilter<any>;
+    if (typeof arg === "function") filter = arg(MongoFilter(this.type).query());
+    const { where } = readFilterMeta(filter);
+    console.log(where);
+
+    const _ftd = Object.keys(where).map<[string, any]>(k => {
+      const vx = where[k];
+      const ret: any = {};
+      if (!!vx.equal) ret.$in = [...vx.equal];
+      return [k, ret];
+    }).reduce((p, c) => ({ ...p, [c[0]]: c[1] }), {});
+
+    console.log(_ftd);
+
+    return this.collection.find(_ftd).toArray();
   }
 };
+
+function readFilterMeta<T>(filter: IQueryFilter<T>): IFilterMeta<T> {
+  // @ts-ignore
+  return filter["@meta"];
+}
 
 class MongoDBInstance {
 
@@ -132,7 +163,8 @@ class MongoDBInstance {
 interface IMongoCollection<T> {
   readonly collection: db.Collection<any>;
   readonly type: IConstructor<T>;
-  transform(entry: T): any;
   insertOne(entry: T, options?: db.CollectionInsertOneOptions): Promise<db.InsertOneWriteOpResult>;
   insertMany(entries: T[], options?: db.CollectionInsertManyOptions): Promise<db.InsertWriteOpResult>;
+  find(filter: IQueryFilter<T>): Promise<T[]>;
+  find(invoke: (filter: IQueryFilter<T>) => IQueryFilter<T>): Promise<T[]>;
 }
