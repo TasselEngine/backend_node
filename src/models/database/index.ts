@@ -29,19 +29,27 @@ export async function init() {
     //   gender: true
     // })]);
     const result = await collection.find(i => i
-      .where("data", {
-        equal: [BsonType.BinaryData, BsonType.String]
-      })
-      // .where("gender", {
-      //   equal: [true]
-      // })
-      .where("ageNum", {
-        equal: [Int64.fromString("12"), Int64.fromString("333")]
-      })
+      .where("data", "=", [BsonType.BinaryData, BsonType.String])
+      .where("data", "!=", [BsonType.Int64])
+      .where("ageNum", ">", Int64.fromString("12"))
+      .where("ageNum", "<=", Int64.fromString("18772"))
       .where("name", {
-        equal: ["woshinidie", "i'm your father fk02"]
+        "=": ["woshinidie", "i'm your father fk02"]
+      })
+      .where("gender", "or", {
+        "=": [false]
       })
     );
+    // const result = await collection.find(
+    //   // @ts-ignore
+    //   (i: any) =>
+    //     ((i.data === BsonType.BinaryData || i.data === BsonType.String) &&
+    //       (i.name === "woshinidie" || i.name === "i'm your father fk02") &&
+    //       i.data !== BsonType.Int64 &&
+    //       i.ageNum > Int64.fromString("12") &&
+    //       i.ageNum <= Int64.fromString("18772")) ||
+    //     i.gender === false
+    // );
     console.log(result);
   } catch (e) {
     console.log(e);

@@ -1,7 +1,7 @@
 import db from "mongodb";
 import { IConstructor, tryGetDefine, CollectionSet, BsonType, DefinitionSet } from "./base";
 import { TypedSerializer, Serialize, Deserialize } from "@bonbons/core";
-import { IQueryFilter, MongoFilter, IFilterMeta, IQueryWhere } from "./filter";
+import { IQueryFilter, MongoFilter, readFilterMeta, Operator, IQueryWhere } from "./filter";
 
 const MongoDB = db.MongoClient;
 
@@ -107,25 +107,40 @@ const defaultHandler: IMongoCollectionBase = {
   find(arg: IQueryFilter<any> | ((filter: IQueryFilter<any>) => IQueryFilter<any>)) {
     let filter = arg as IQueryFilter<any>;
     if (typeof arg === "function") filter = arg(MongoFilter(this.type).query());
-    const { where } = readFilterMeta(filter);
+    const { where, or, nor } = readFilterMeta(filter);
     console.log(where);
-
-    const _ftd = Object.keys(where).map<[string, any]>(k => {
-      const vx = where[k];
-      const ret: any = {};
-      if (!!vx.equal) ret.$in = [...vx.equal];
-      return [k, ret];
-    }).reduce((p, c) => ({ ...p, [c[0]]: c[1] }), {});
-
+    const _ftd: any = Object.keys(where)
+      .map(k => resolveOperators(where[k], k))
+      .reduce((p, c) => ({ ...p, [c[0]]: c[1] }), {});
+    if (or.length > 0) {
+      _ftd.$or = or.map(rule => resolveOperators(rule, true));
+    }
+    if (nor.length > 0) {
+      _ftd.$nor = nor.map(rule => resolveOperators(rule, true));
+    }
     console.log(_ftd);
-
     return this.collection.find(_ftd).toArray();
   }
 };
 
-function readFilterMeta<T>(filter: IQueryFilter<T>): IFilterMeta<T> {
-  // @ts-ignore
-  return filter["@meta"];
+function resolveOperators(data: any, isObj: true): { [prop: string]: any };
+function resolveOperators(vx: IQueryWhere<any, any>, k: string): [string, any];
+function resolveOperators(vx_data: any, k: string | true) {
+  const ret: any = {};
+  const key = k === true ? Object.keys(vx_data)[0] : k;
+  const data = k === true ? vx_data[key] : vx_data;
+  readOperator(data, ret, "=");
+  readOperator(data, ret, "!=");
+  readOperator(data, ret, ">");
+  readOperator(data, ret, ">=");
+  readOperator(data, ret, "<");
+  readOperator(data, ret, "<=");
+  if (k === true) return { [key]: ret };
+  return [key, ret];
+}
+
+function readOperator(vx: any, ret: any, operator: keyof typeof Operator) {
+  if (!!vx[operator]) ret[Operator[operator]] = vx[operator];
 }
 
 class MongoDBInstance {
