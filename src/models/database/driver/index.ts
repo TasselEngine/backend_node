@@ -112,12 +112,8 @@ const defaultHandler: IMongoCollectionBase = {
     const _ftd: any = Object.keys(where)
       .map(k => resolveOperators(where[k], k))
       .reduce((p, c) => ({ ...p, [c[0]]: c[1] }), {});
-    if (or.length > 0) {
-      _ftd.$or = or.map(rule => resolveOperators(rule, true));
-    }
-    if (nor.length > 0) {
-      _ftd.$nor = nor.map(rule => resolveOperators(rule, true));
-    }
+    if (or.length > 0) _ftd.$or = or.map(rule => resolveOperators(rule, true));
+    if (nor.length > 0) _ftd.$nor = nor.map(rule => resolveOperators(rule, true));
     console.log(_ftd);
     return this.collection.find(_ftd).toArray();
   }
